@@ -14,7 +14,7 @@ class Game:
         self.logo_img = pygame.image.load("Purple hunter Bilder/Purple hunter-logo.ico")
         pygame.display.set_icon(self.logo_img)
         self.clock = pygame.time.Clock()
-        self.bullet = Bullet(self, 350, 704.7)
+        self.hunter = Hunter(self, 350, 704.7)
         self.korbs = RedBall(self)
         self.greenkorbs = GreenBall(self)
         self.score = 0
@@ -24,28 +24,28 @@ class Game:
         while self.run:
             self.clock.tick(360)
             self.screen.fill((0, 0, 0))
-            if self.bullet.y == 704.7:
+            if self.hunter.y == 704.7:
                 self.shot = True
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE and self.shot is True:
-                        self.bullet.move(-2.4)
+                        self.hunter.move(-2.4)
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
                         self.shot = False
 
-            self.bullet.draw()
+            self.hunter.draw()
             self.korbs.draw()
             self.korbs.draw2()
             self.korbs.draw3()
             self.korbs.draw4()
             self.korbs.draw5()
             self.greenkorbs.draw_green_ball()
-            self.bullet.collision()
+            self.hunter.collision()
             self.print_score()
-            self.bullet.red_ball_collision()
+            self.hunter.red_ball_collision()
             pygame.display.update()
 
     def print_score(self):
@@ -59,7 +59,7 @@ class Game:
         self.screen.blit(over_text, (270, 320))
 
 
-class Bullet:
+class Hunter:
     def __init__(self, game, x, y):
         self.x = x
         self.y = y
@@ -69,7 +69,7 @@ class Bullet:
         self.change_x = 3
         self.value1 = 3
         self.value2 = -3
-        self.movemant = True
+        self.movement = True
 
     def collision(self):
         distance = math.sqrt(math.pow(self.x - self.Game.greenkorbs.xg, 2)
@@ -101,38 +101,43 @@ class Bullet:
         distance3 = math.sqrt(math.pow(self.x - self.Game.korbs.x3, 2) + math.pow(self.y - self.Game.korbs.y3, 2))
         distance4 = math.sqrt(math.pow(self.x - self.Game.korbs.x4, 2) + math.pow(self.y - self.Game.korbs.y4, 2))
         distance5 = math.sqrt(math.pow(self.x - self.Game.korbs.x5, 2) + math.pow(self.y - self.Game.korbs.y5, 2))
+
         if distance1 < 45:
             self.Game.screen.fill((0, 0, 0))
             self.Game.game_over()
-            time.sleep(1)
+            time.sleep(0.1)
             self.Game.score = 0
             self.value2 = -3
             self.value1 = 3
+
         if distance2 < 45:
             self.Game.screen.fill((0, 0, 0))
             self.Game.game_over()
-            time.sleep(1)
+            time.sleep(0.1)
             self.Game.score = 0
             self.value2 = -3
             self.value1 = 3
+
         if distance3 < 45:
             self.Game.screen.fill((0, 0, 0))
             self.Game.game_over()
-            time.sleep(1)
+            time.sleep(0.1)
             self.Game.score = 0
             self.value2 = -3
             self.value1 = 3
+
         if distance4 < 45:
             self.Game.screen.fill((0, 0, 0))
             self.Game.game_over()
-            time.sleep(1)
+            time.sleep(0.1)
             self.Game.score = 0
             self.value2 = -3
             self.value1 = 3
+
         if distance5 < 45:
             self.Game.screen.fill((0, 0, 0))
             self.Game.game_over()
-            time.sleep(1)
+            time.sleep(0.1)
             self.Game.score = 0
             self.value2 = -3
             self.value1 = 3
@@ -140,12 +145,9 @@ class Bullet:
     def move(self, speed):
         self.change_y += speed
 
-    def move2(self, speed):
-        self.change_x += speed
-
     def draw(self):
         self.y += self.change_y
-        if self.movemant:
+        if self.movement:
             self.x += self.change_x
         if self.y < 0:
             self.y = 704.7
@@ -153,12 +155,12 @@ class Bullet:
             self.change_y = 0
         if self.x > 1050:
             self.change_x = self.value2
-        if self.x < 0:
+        if self.x < -31:
             self.change_x = self.value1
         if self.y < 704.7:
-            self.movemant = False
+            self.movement = False
         if self.y == 704.7:
-            self.movemant = True
+            self.movement = True
         self.Game.screen.blit(self.bullet_img, (self.x, self.y))
 
 
